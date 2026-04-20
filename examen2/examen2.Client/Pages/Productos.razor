@@ -48,11 +48,13 @@
 </div>
 
 <button class="btn btn-primary mb-3" @onclick="Guardar">Guardar</button>
+<button class="btn btn-secondary mb-3" @onclick="Existe">Existente</button>
+<button class="btn btn-secondary mb-3" @onclick="Listar">Listado</button>
 
 @if(_mostrar == true)
 {
     <hr />
-    <b>Listado de productos</b>
+    <p>Listado de productos</p>
     <table class="table">
         <thead>
             <tr>
@@ -70,10 +72,11 @@
             <tr>
                 <td>@_inventario[i]</td>
                 <td>@_listProductos[i]</td>
+                <td>@_departamentos[i]</td>
 
                 <td>
-                    <button>🗑</button>
-                    <button>✏</button>
+                    <button class="btn btn-danger btn-sm" @onclick="() => Eliminar(i)">🗑</button>
+                    <button class="btn btn-secondary btn-sm" @onclick="() => Modificar(i)">✏</button>
                 </td>
             </tr>
         }
@@ -123,5 +126,31 @@
             _departamentos.Add(_depa);
             _mostrar = true;
         }
+    }
+
+    private void Existe()
+    {
+
+    }
+
+    private void Listar()
+    {
+        _mostrar = true;
+    }
+
+    private void Eliminar(int i)
+    {
+        _inventario.RemoveAt(i);
+        _listProductos.RemoveAt(i);
+        _departamentos.RemoveAt(i);
+    }
+
+    private void Modificar(int i)
+    {
+        _num = _inventario[i];
+        _nombre = _listProductos[i];
+        _depa = _departamentos[i];
+
+        Eliminar(i);
     }
 }
