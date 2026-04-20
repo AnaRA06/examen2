@@ -1,0 +1,127 @@
+﻿@page "/productos";
+@rendermode InteractiveServer
+
+<h3>Productos</h3>
+
+@if(_errorNum != "")
+{
+    <div class="alert alert-danger">@_errorNum</div>
+}
+
+@if (_errorNombre != "")
+{
+    <div class="alert alert-danger">@_errorNombre</div>
+}
+
+<div class=" mb-3 row">
+    <label class="col-sm-2 col-form-label">Inventario:</label>
+    <div class="col-sm-10">
+        <input type="number" class="form-control" @bind="_num"/>
+    </div>
+</div>
+
+<div class=" mb-3 row">
+    <label class="col-sm-2 col-form-label">Nombre:</label>
+    <div class="col-sm-10">
+        <input type="text" class="form-control" @bind="_nombre"/>
+    </div>
+</div>
+
+<div class="mb-3 row">
+    <label class="col-sm-2 col-form-label">Departamento:</label>
+    
+    <InputRadioGroup @bind-Value="_depa">
+
+        <label>
+            <InputRadio Value="@("Frutas")" /> Frutas
+        </label>
+
+        <label>
+            <InputRadio Value="@("Verduras")" /> Verduras
+        </label>
+
+        <label>
+            <InputRadio Value="@("Lacteos")" /> Lácteos
+        </label>
+
+    </InputRadioGroup>
+</div>
+
+<button class="btn btn-primary mb-3" @onclick="Guardar">Guardar</button>
+
+@if(_mostrar == true)
+{
+    <hr />
+    <b>Listado de productos</b>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Inventario</th>
+                <th>Nombre</th>
+                <th>Departamento</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+    </table>
+
+    <tbody>
+        @for (int i = 0; i < _inventario.Count; i++)
+        {
+            <tr>
+                <td>@_inventario[i]</td>
+                <td>@_listProductos[i]</td>
+
+                <td>
+                    <button>🗑</button>
+                    <button>✏</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+}
+
+@code {
+    private int _num;
+    private string _nombre = "";
+    private string _depa = "";
+    private List<string> _listProductos = new();
+    private List<int> _inventario = new();
+    private List<string> _departamentos = new();
+    private string _errorNum = "";
+    private string _errorNombre = "";
+    private bool _repetido = false;
+    private bool _mostrar = false;
+
+    private void Guardar()
+    {
+        _errorNum = "";
+        _errorNombre = "";
+        _repetido = false;
+        foreach(int num in _inventario)
+        {
+            if(num == _num)
+            {
+                _repetido = true;
+            }
+        }
+        if(_num <= 0){
+            _errorNum = "Número incorrecto";
+        } else if(_repetido)
+        {
+            _errorNum = "El número de inventario se encuentra registrado. Asegúrate de que sea único";
+        }
+
+        if(_nombre == "" || _nombre.Length > 200)
+        {
+            _errorNombre = "El nombre es incorrecto. Asegúrate de que no esté vacío y no sea largo";
+        }
+
+        if(_errorNum == "" && _errorNombre == "")
+        {
+            _inventario.Add(_num);
+            _listProductos.Add(_nombre);
+            _departamentos.Add(_depa);
+            _mostrar = true;
+        }
+    }
+}

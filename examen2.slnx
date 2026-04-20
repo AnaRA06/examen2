@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="examen2/examen2.Client/examen2.Client.csproj" />
+  <Project Path="examen2/examen2/examen2.csproj" />
+</Solution>
